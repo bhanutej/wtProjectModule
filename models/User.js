@@ -13,3 +13,7 @@ const userSchema = new Schema({
         }
     }
 });
+
+userSchema.plugin(timestamps);
+
+mongoose.model('users', userSchema);

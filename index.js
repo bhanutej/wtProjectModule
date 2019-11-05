@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 require('./models/User');
 const keys = require('./config/keys');
 
-
+const authRoutes = require('./routes/authRoutes');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true });
 
@@ -24,6 +24,8 @@ app.use((error, req, res, next) => {
 app.get('/', (req, res) => {
     res.send({hi: 'Bye'});
 });
+
+authRoutes(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
