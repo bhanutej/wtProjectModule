@@ -9,6 +9,8 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     phoneNumber: { type: String, required: true, unique: true },
     userType: { type: String, enum: ['SuperAdmin', 'Admin', 'User'], default: 'User' },
+    // relations
+    projects: [{ type: Schema.Types.ObjectId, ref: 'projects' }],
 });
 
 userSchema.plugin(timestamps);
