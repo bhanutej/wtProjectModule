@@ -19,6 +19,21 @@ module.exports = {
         res.status(404).send({ error: "User Not Found" });
       }
     } catch (errors) {
+      console.log(">>> CREATE PROJECT EXCEPTIONS >>> ", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
+  },
+
+  update_project: async (req, res, next) => {
+    try {
+      const user = await User.findById({_id: req.userData.userId});
+      if(user.projects.includes(req.params.project_id)){
+        const project = await Project.findByIdAndUpdate({_id: req.params.project_id}, _projectObj(req.body), { new: true, runValidators: true })
+        res.status(200).json({ message: 'Project Updated', project });
+      }
+    } catch (errors) {
+      console.log(">>> UPDATE PROJECT EXCEPTIONS >>> ", errors);
       const [handledErrors, statusCode] = handleErrors(errors);
       res.status(statusCode).send(handledErrors);
     }
