@@ -37,6 +37,17 @@ module.exports = {
       const [handledErrors, statusCode] = handleErrors(errors);
       res.status(statusCode).send(handledErrors);
     }
+  },
+
+  projects: async (req, res, next) => {
+    try {
+      const user = await User.findById({_id: req.userData.userId}).populate('projects');
+      res.status(200).json({address: user.projects});
+    } catch (errors) {
+      console.log(">>> PROJECTS EXCEPTION >>>", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
   }
 };
 
