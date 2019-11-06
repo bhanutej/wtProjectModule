@@ -48,6 +48,19 @@ module.exports = {
       const [handledErrors, statusCode] = handleErrors(errors);
       res.status(statusCode).send(handledErrors);
     }
+  },
+
+  delete_project: async (req, res, next) => {
+    try {
+      const user = await User.findById({_id: req.userData.userId}).populate('projects');
+      await user.update({ $pull: { projects: { $in: [req.params.project_id] } } } )
+      await Project.deleteOne({_id: req.params.project_id});
+      res.status(200).json({projects: user.projects});
+    } catch(errors) {
+      console.log(">>> DELETE PROJECT EXCEPTION >>>", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
   }
 };
 
