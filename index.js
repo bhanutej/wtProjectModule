@@ -7,7 +7,7 @@ const keys = require('./config/keys');
 
 const authRoutes = require('./routes/authRoutes');
 
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true });
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true });
 
 const  app = express();
 

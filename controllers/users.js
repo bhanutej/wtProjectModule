@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const User = mongoose.model('users');
 const keys = require('../config/keys');
-const { handleErrors, handleUnauthorizedExecption } = require('../utilities/handlePromise');
+const { handleErrors } = require('../utilities/handlePromise');
 
 module.exports = {
     user_jwt_signup: async (req, res, next) => {
@@ -13,11 +13,12 @@ module.exports = {
             const userObj = new User(getJwtUserObj(req.body, passwordHash));
             const user = await userObj.save();
             res.status(201).send({ message: 'User create', user });
-        } catch (error) {
-            if (error.code === 11000 && error.name === 'MongoError'){
+        } catch (errors) {
+            if (errors.code === 11000 && errors.name === 'MongoError'){
                 res.status(422).send({ error: "Email already existed" });
             }
-            res.send(500).send({ error });
+            const [handledErrors, statusCode] = handleErrors(errors);
+            res.status(statusCode).send(handledErrors);
         }
     },
 
@@ -32,8 +33,9 @@ module.exports = {
                 }
             }
             res.status(401).json({ error: 'Auth failed' });
-        } catch (error) {
-            res.status(500).send({ error });
+        } catch (errors) {
+            const [handledErrors, statusCode] = handleErrors(errors);
+            res.status(statusCode).send(handledErrors);
         }
     }
 };
@@ -43,7 +45,8 @@ getJwtUserObj = (user, hash) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        password: hash
+        password: hash,
+        phoneNumber: user.phoneNumber
     };
 };
 
