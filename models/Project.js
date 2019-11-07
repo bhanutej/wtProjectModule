@@ -7,6 +7,13 @@ const projectSchema = new Schema({
     description: { type: String, required: true },
     //relations
     user: { type: Schema.Types.ObjectId, ref: 'users' },
+    projectProfiles: [{ type: Schema.Types.ObjectId, ref: 'projectProfiles' }],
+    projectVariables: [{ type: Schema.Types.ObjectId, ref: 'projectVariables' }],
+    projectServices: [{ type: Schema.Types.ObjectId, ref: 'projectServices' }],
+    projectDataSockets: [{ type: Schema.Types.ObjectId, ref: 'projectDataSockets' }],
+    projectAlerts: [{ type: Schema.Types.ObjectId, ref: 'projectAlerts' }],
+    projectEvents: [{ type: Schema.Types.ObjectId, ref: 'projectEvents' }],
+    projectDataSources: [{ type: Schema.Types.ObjectId, ref: 'projectDataSources' }],
 });
 
 projectSchema.plugin(timestamps);
