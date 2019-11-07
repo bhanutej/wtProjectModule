@@ -5,6 +5,21 @@ const Project = mongoose.model('projects');
 const { handleErrors, handleUnauthorizedException } = require('../utilities/handlePromise');
 
 module.exports = {
+  project_info: async (req, res, next) => {
+    try {
+      const project = await Project.findById({_id: req.params.project_id});
+      if(project) {
+        res.status(201).json({ message: 'Project Founded', project });
+      } else {
+        res.status(404).send({ error: "Project Not Found" });
+      }
+    } catch (errors) {
+      console.log(">>> PROJECT INFO EXCEPTIONS >>> ", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
+  },
+
   create_project: async (req, res, next) => {
     try {
       const user = await User.findById({_id: req.userData.userId});
