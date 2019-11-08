@@ -6,20 +6,20 @@ const ProjectProfilePage = mongoose.model('projectProfilePages');
 const { handleErrors, handleUnauthorizedException } = require('../utilities/handlePromise');
 
 module.exports = {
-  // projectProfileInfo: async (req, res, next) => {
-  //   try {
-  //     const projectProfile = await ProjectProfile.findById({_id: req.body.profileId});
-  //     if(projectProfile) {
-  //       res.status(201).json({ message: 'ProjectProfile Founded', projectProfile });
-  //     } else {
-  //       res.status(404).send({ error: "ProjectProfile Not Found" });
-  //     }
-  //   } catch (errors) {
-  //     console.log(">>> PROJECT INFO EXCEPTIONS >>> ", errors);
-  //     const [handledErrors, statusCode] = handleErrors(errors);
-  //     res.status(statusCode).send(handledErrors);
-  //   }
-  // },
+  projectProfilePageInfo: async (req, res, next) => {
+    try {
+      const projectProfilePage = await ProjectProfilePage.findById({_id: req.body.pageId});
+      if(projectProfilePage) {
+        res.status(201).json({ message: 'Project Profile Page Founded', projectProfilePage });
+      } else {
+        res.status(404).send({ error: "Project Profile Page Not Found" });
+      }
+    } catch (errors) {
+      console.log(">>> PROJECT INFO EXCEPTIONS >>> ", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
+  },
 
   createProjectProfilePage: async (req, res, next) => {
     if (req.body.profileId) {
@@ -71,19 +71,19 @@ module.exports = {
     }
   },
 
-  // deleteProjectProfile: async (req, res, next) => {
-  //   try {
-  //     const projectProfile = await ProjectProfile.findById({_id: req.body.profileId});
-  //     const project = await Project.findById({_id: projectProfile.project}).populate('projectProfiles');
-  //     await project.update({ $pull: { projectProfiles: { $in: [req.body.profileId] } } } )
-  //     await ProjectProfile.deleteOne({_id: req.body.projectId});
-  //     res.status(200).json({message: 'Project Profile deleted'});
-  //   } catch(errors) {
-  //     console.log(">>> DELETE PROJECT PROFILE EXCEPTION >>>", errors);
-  //     const [handledErrors, statusCode] = handleErrors(errors);
-  //     res.status(statusCode).send(handledErrors);
-  //   }
-  // }
+  deleteProjectProfilePage: async (req, res, next) => {
+    try {
+      const projectProfilePage = await ProjectProfilePage.findById({_id: req.body.pageId});
+      const projectProfile = await ProjectProfile.findById({_id: projectProfilePage.projectProfile});
+      await projectProfile.update({ $pull: { projectProfilePages: { $in: [req.body.pageId] } } } );
+      await ProjectProfilePage.deleteOne({_id: req.body.pageId});
+      res.status(200).json({message: 'Project Profile Page deleted'});
+    } catch(errors) {
+      console.log(">>> DELETE PROJECT PROFILE EXCEPTION >>>", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
+  }
 };
 
 _projectProfilePageObj = (profilePage) => {
