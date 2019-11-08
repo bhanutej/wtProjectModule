@@ -45,34 +45,31 @@ module.exports = {
     }
   },
 
-  // updateProjectProfile: async (req, res, next) => {
-  //   try {
-  //     const projectProfile = await ProjectProfile.findByIdAndUpdate({_id: req.body.profileId}, _projectProfilesObj(req.body), { new: true, runValidators: true })
-  //     if (req.body.isDefaultProfile) {
-  //       _updateIsDefaultProfile(projectProfile, req.body.profileId);
-  //     }
-  //     res.status(200).json({ message: 'Project Profile Updated', projectProfile });
-  //   } catch (errors) {
-  //     console.log(">>> UPDATE PROJECT EXCEPTIONS >>> ", errors);
-  //     const [handledErrors, statusCode] = handleErrors(errors);
-  //     res.status(statusCode).send(handledErrors);
-  //   }
-  // },
+  updateProjectProfilePage: async (req, res, next) => {
+    try {
+      const projectProfilePage = await ProjectProfilePage.findByIdAndUpdate({_id: req.body.pageId}, _projectProfilePageObj(req.body), { new: true, runValidators: true })
+      res.status(200).json({ message: 'Project Profile Page Updated', projectProfilePage });
+    } catch (errors) {
+      console.log(">>> UPDATE PROJECT PROFILE PAGE EXCEPTIONS >>> ", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
+  },
 
-  // projectProfiles: async (req, res, next) => {
-  //   try {
-  //     const project = await Project.findById({_id: req.body.projectId}).populate('projectProfiles');
-  //     if(project) {
-  //       res.status(200).json({profiles: project.projectProfiles});
-  //     } else {
-  //       res.status(404).send({ error: "Project Not Found" });
-  //     }
-  //   } catch (errors) {
-  //     console.log(">>> PROJECTS EXCEPTION >>>", errors);
-  //     const [handledErrors, statusCode] = handleErrors(errors);
-  //     res.status(statusCode).send(handledErrors);
-  //   }
-  // },
+  projectProfilePages: async (req, res, next) => {
+    try {
+      const projectProfile = await ProjectProfile.findById({_id: req.body.profileId}).populate('projectProfilePages');
+      if(projectProfile) {
+        res.status(200).json({profiles: projectProfile.projectProfilePages});
+      } else {
+        res.status(404).send({ error: "Project Profile Not Found" });
+      }
+    } catch (errors) {
+      console.log(">>> PROJECT PROFILE PAGES EXCEPTION >>>", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
+  },
 
   // deleteProjectProfile: async (req, res, next) => {
   //   try {
