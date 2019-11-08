@@ -6,14 +6,14 @@ const projectSchema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     //relations
-    user: { type: Schema.Types.ObjectId, ref: 'users' },
-    projectProfiles: [{ type: Schema.Types.ObjectId, ref: 'projectProfiles' }],
-    projectVariables: [{ type: Schema.Types.ObjectId, ref: 'projectVariables' }],
-    projectServices: [{ type: Schema.Types.ObjectId, ref: 'projectServices' }],
-    projectDataSockets: [{ type: Schema.Types.ObjectId, ref: 'projectDataSockets' }],
-    projectAlerts: [{ type: Schema.Types.ObjectId, ref: 'projectAlerts' }],
-    projectEvents: [{ type: Schema.Types.ObjectId, ref: 'projectEvents' }],
-    projectDataSources: [{ type: Schema.Types.ObjectId, ref: 'projectDataSources' }],
+    user: { type: Schema.Types.ObjectId, ref: 'users' }, // belongs_to: useer
+    projectProfiles: [{ type: Schema.Types.ObjectId, ref: 'projectProfiles' }], // has_many: projectProfiles
+    projectVariables: [{ type: Schema.Types.ObjectId, ref: 'projectVariables' }], // has_many: projectVariables
+    projectServices: [{ type: Schema.Types.ObjectId, ref: 'projectServices' }], // has_many: projectServices
+    projectDataSockets: [{ type: Schema.Types.ObjectId, ref: 'projectDataSockets' }], // has_many: projectDataSockets
+    projectAlerts: [{ type: Schema.Types.ObjectId, ref: 'projectAlerts' }], // has_many: projectAlerts
+    projectEvents: [{ type: Schema.Types.ObjectId, ref: 'projectEvents' }], // has_many: projectEvents
+    projectDataSources: [{ type: Schema.Types.ObjectId, ref: 'projectDataSources' }], // has_many: projectDataSources
 });
 
 projectSchema.plugin(timestamps);

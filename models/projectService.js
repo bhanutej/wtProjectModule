@@ -6,7 +6,7 @@ const projectServiceSchema = new Schema({
   name: { type: String, required: true },
   serviceInfo: { type: Schema.Types.Mixed, required: true },
   //relations
-  project: { type: Schema.Types.ObjectId, ref: 'projects' },
+  project: { type: Schema.Types.ObjectId, ref: 'projects' }, // belongs_to: project
 });
 
 projectServiceSchema.plugin(timestamps);
