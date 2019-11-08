@@ -44,16 +44,22 @@ module.exports = {
     }
   },
 
-  // updateProjectProfilePage: async (req, res, next) => {
-  //   try {
-  //     const projectProfilePage = await ProjectProfilePage.findByIdAndUpdate({_id: req.body.pageId}, _projectProfilePageObj(req.body), { new: true, runValidators: true })
-  //     res.status(200).json({ message: 'Project Profile Page Updated', projectProfilePage });
-  //   } catch (errors) {
-  //     console.log(">>> UPDATE PROJECT PROFILE PAGE EXCEPTIONS >>> ", errors);
-  //     const [handledErrors, statusCode] = handleErrors(errors);
-  //     res.status(statusCode).send(handledErrors);
-  //   }
-  // },
+  updateProjectVariable: async (req, res, next) => {
+    try {
+      const projectVariable = await ProjectVariable.findById({_id: req.body.projectVariableId});
+      if (projectVariable) {
+        const aa = await projectVariable.updateOne(_projectVariableObj(req.body));
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ", aa);
+        res.status(200).json({ message: 'Project Variable Updated', projectVariable });
+      } else {
+        res.status(404).json({ message: 'Project Variable Not Found' });  
+      }
+    } catch (errors) {
+      console.log(">>> UPDATE PROJECT VARIABLE EXCEPTIONS >>> ", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
+  },
 
   // projectProfilePages: async (req, res, next) => {
   //   try {
