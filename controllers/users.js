@@ -7,10 +7,10 @@ const keys = require('../config/keys');
 const { handleErrors } = require('../utilities/handlePromise');
 
 module.exports = {
-    user_jwt_signup: async (req, res, next) => {
+    userJwtSignup: async (req, res, next) => {
         try {
             const passwordHash = await bcrypt.hash(req.body.password, 10);
-            const userObj = new User(getJwtUserObj(req.body, passwordHash));
+            const userObj = new User(_getJwtUserObj(req.body, passwordHash));
             const user = await userObj.save();
             res.status(201).send({ message: 'User create', user });
         } catch (errors) {
@@ -22,13 +22,13 @@ module.exports = {
         }
     },
 
-    user_jwt_signin: async (req, res, next) => {
+    userJwtSignin: async (req, res, next) => {
         try {
             const user = await User.findOne({ email: req.body.email });
             if(user) {
                 const checkPassword = await bcrypt.compare(req.body.password, user.password);
                 if(checkPassword) {
-                    const token = getSignInJwtToken(user);
+                    const token = _getSignInJwtToken(user);
                     return res.status(200).json({ message: 'Auth Successfull', token });
                 }
             }
@@ -40,7 +40,7 @@ module.exports = {
     }
 };
 
-getJwtUserObj = (user, hash) => {
+_getJwtUserObj = (user, hash) => {
     return {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -50,7 +50,7 @@ getJwtUserObj = (user, hash) => {
     };
 };
 
-getSignInJwtToken = (user) => {
+_getSignInJwtToken = (user) => {
     return jwt.sign(
         {
             email: user.email,

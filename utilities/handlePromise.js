@@ -10,7 +10,7 @@ module.exports.handleErrors = (errors) => {
     switch(errors.name) {
         case 'ValidationError':
             return [handleValidationErrors(errors.errors, validationErrors), 422];
-        case 'CaseError':
+        case 'CastError':
             return [handleCastErrors(errors, validationErrors), 401];
         default:
             return validationErrors;

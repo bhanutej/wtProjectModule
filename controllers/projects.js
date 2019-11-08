@@ -5,9 +5,9 @@ const Project = mongoose.model('projects');
 const { handleErrors, handleUnauthorizedException } = require('../utilities/handlePromise');
 
 module.exports = {
-  project_info: async (req, res, next) => {
+  projectInfo: async (req, res, next) => {
     try {
-      const project = await Project.findById({_id: req.params.project_id});
+      const project = await Project.findById({_id: req.body.projectId});
       if(project) {
         res.status(201).json({ message: 'Project Founded', project });
       } else {
@@ -20,7 +20,7 @@ module.exports = {
     }
   },
 
-  create_project: async (req, res, next) => {
+  createProject: async (req, res, next) => {
     try {
       const user = await User.findById({_id: req.userData.userId});
       if (user) {
@@ -40,11 +40,11 @@ module.exports = {
     }
   },
 
-  update_project: async (req, res, next) => {
+  updateProject: async (req, res, next) => {
     try {
       const user = await User.findById({_id: req.userData.userId});
-      if(user.projects.includes(req.params.project_id)){
-        const project = await Project.findByIdAndUpdate({_id: req.params.project_id}, _projectObj(req.body), { new: true, runValidators: true })
+      if(user.projects.includes(req.body.projectId)){
+        const project = await Project.findByIdAndUpdate({_id: req.body.projectId}, _projectObj(req.body), { new: true, runValidators: true })
         res.status(200).json({ message: 'Project Updated', project });
       }
     } catch (errors) {
@@ -65,11 +65,11 @@ module.exports = {
     }
   },
 
-  delete_project: async (req, res, next) => {
+  deleteProject: async (req, res, next) => {
     try {
       const user = await User.findById({_id: req.userData.userId}).populate('projects');
-      await user.update({ $pull: { projects: { $in: [req.params.project_id] } } } )
-      await Project.deleteOne({_id: req.params.project_id});
+      await user.update({ $pull: { projects: { $in: [req.body.projectId] } } } )
+      await Project.deleteOne({_id: req.body.projectId});
       res.status(200).json({projects: user.projects});
     } catch(errors) {
       console.log(">>> DELETE PROJECT EXCEPTION >>>", errors);

@@ -7,9 +7,9 @@ const projectProfileSchema = new Schema({
     isDefaultProfile: { type: Boolean, default: false },
     //relations
     project: { type: Schema.Types.ObjectId, ref: 'projects' },
-    projectProfiles: [{ type: Schema.Types.ObjectId, ref: 'projectProjects' }],
+    projectPages: [{ type: Schema.Types.ObjectId, ref: 'projectPages' }],
 });
 
 projectProfileSchema.plugin(timestamps);
 
-mongoose.model('projectPrfiles', projectProfileSchema);
+mongoose.model('projectProfiles', projectProfileSchema);

@@ -4,10 +4,12 @@ const bodyParser = require('body-parser');
 
 require('./models/User');
 require('./models/Project');
+require('./models/ProjectProfile');
 const keys = require('./config/keys');
 
 const authRoutes = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
+const projectProfileRoutes = require('./routes/projectProfileRoutes');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true });
 
@@ -29,6 +31,7 @@ app.get('/', (req, res) => {
 
 authRoutes(app);
 projectRoutes(app);
+projectProfileRoutes(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);

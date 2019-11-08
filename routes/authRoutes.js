@@ -9,9 +9,9 @@ module.exports = (app) => {
         }
     );
 
-    app.post('/api/signup', UsersController.user_jwt_signup);
-    app.post('/api/signin', UsersController.user_jwt_signin);
-    app.get('/api/current_user', (req, res) => {
+    app.post('/api/signup', UsersController.userJwtSignup);
+    app.post('/api/signin', UsersController.userJwtSignin);
+    app.get('/api/currentUser', (req, res) => {
         res.send(req.user);
     });
     app.get('/api/logout', (req, res) => {
