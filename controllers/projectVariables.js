@@ -5,20 +5,20 @@ const ProjectVariable = mongoose.model('projectVariables');
 const { handleErrors, handleUnauthorizedException } = require('../utilities/handlePromise');
 
 module.exports = {
-  // projectProfilePageInfo: async (req, res, next) => {
-  //   try {
-  //     const projectProfilePage = await ProjectProfilePage.findById({_id: req.body.pageId});
-  //     if(projectProfilePage) {
-  //       res.status(201).json({ message: 'Project Profile Page Founded', projectProfilePage });
-  //     } else {
-  //       res.status(404).send({ error: "Project Profile Page Not Found" });
-  //     }
-  //   } catch (errors) {
-  //     console.log(">>> PROJECT INFO EXCEPTIONS >>> ", errors);
-  //     const [handledErrors, statusCode] = handleErrors(errors);
-  //     res.status(statusCode).send(handledErrors);
-  //   }
-  // },
+  projectVariableInfo: async (req, res, next) => {
+    try {
+      const projectVariable = await ProjectVariable.findById({_id: req.body.projectVariableId});
+      if(projectVariable) {
+        res.status(201).json({ message: 'Project Variable Founded', projectVariable });
+      } else {
+        res.status(404).send({ error: "Project Variable Not Found" });
+      }
+    } catch (errors) {
+      console.log(">>> PROJECT INFO EXCEPTIONS >>> ", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
+  },
 
   createProjectVariable: async (req, res, next) => {
     if (req.body.projectId) {
