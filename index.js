@@ -8,10 +8,10 @@ require('./models/ProjectProfile');
 require('./models/ProjectProfilePage');
 require('./models/ProjectVariable');
 require('./models/ProjectAlert');
-require('./models/projectService');
-require('./models/projectDataSocket');
-require('./models/projectDataSource');
-require('./models/projectEvent');
+require('./models/ProjectService');
+require('./models/ProjectDataSocket');
+require('./models/ProjectDataSource');
+require('./models/ProjectEvent');
 const keys = require('./config/keys');
 
 const authRoutes = require('./routes/authRoutes');
