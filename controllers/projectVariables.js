@@ -65,7 +65,7 @@ module.exports = {
     try {
       const project = await Project.findById({_id: req.body.projectId}).populate('projectVariables');
       if(project) {
-        res.status(200).json({profiles: project.projectVariables});
+        res.status(200).json({variables: project.projectVariables});
       } else {
         res.status(404).send({ error: "Project Not Found" });
       }
@@ -76,19 +76,19 @@ module.exports = {
     }
   },
 
-  // deleteProjectProfilePage: async (req, res, next) => {
-  //   try {
-  //     const projectProfilePage = await ProjectProfilePage.findById({_id: req.body.pageId});
-  //     const projectProfile = await ProjectProfile.findById({_id: projectProfilePage.projectProfile});
-  //     await projectProfile.update({ $pull: { projectProfilePages: { $in: [req.body.pageId] } } } );
-  //     await ProjectProfilePage.deleteOne({_id: req.body.pageId});
-  //     res.status(200).json({message: 'Project Profile Page deleted'});
-  //   } catch(errors) {
-  //     console.log(">>> DELETE PROJECT PROFILE EXCEPTION >>>", errors);
-  //     const [handledErrors, statusCode] = handleErrors(errors);
-  //     res.status(statusCode).send(handledErrors);
-  //   }
-  // }
+  deleteProjectVariable: async (req, res, next) => {
+    try {
+      const projectVariable = await ProjectVariable.findById({_id: req.body.projectVariableId});
+      const project = await Project.findById({_id: projectVariable.project});
+      await project.update({ $pull: { projectVariables: { $in: [req.body.projectVariableId] } } } );
+      await projectVariable.deleteOne({_id: req.body.projectVariableId});
+      res.status(200).json({message: 'Project Variable deleted'});
+    } catch(errors) {
+      console.log(">>> DELETE PROJECT VARIABLE EXCEPTION >>>", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
+  }
 };
 
 _projectVariableObj = (profileVariable) => {
