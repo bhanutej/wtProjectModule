@@ -90,9 +90,9 @@ module.exports = {
   }
 };
 
-_projectAlertObj = (profileAlert) => {
+_projectAlertObj = (projectAlert) => {
   return {
-    name: profileAlert.name,
-    alertInfo: profileAlert.alertInfo,
+    name: projectAlert.name,
+    alertInfo: projectAlert.alertInfo,
   };
 }
