@@ -10,6 +10,7 @@ require('./models/ProjectVariable');
 require('./models/ProjectAlert');
 require('./models/projectService');
 require('./models/projectDataSocket');
+require('./models/projectDataSource');
 const keys = require('./config/keys');
 
 const authRoutes = require('./routes/authRoutes');
@@ -20,6 +21,7 @@ const projectVariableRoutes = require('./routes/projectVariableRoutes');
 const projectAlertRoutes = require('./routes/projectAlertRoutes');
 const projectServiceRoutes = require('./routes/projectServiceRoutes');
 const projectDataSocketRoutes = require('./routes/projectDataSocketRoutes');
+const projectDataSourceRoutes = require('./routes/projectDataSourceRoutes');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true });
 
@@ -47,6 +49,7 @@ projectVariableRoutes(app);
 projectAlertRoutes(app);
 projectServiceRoutes(app);
 projectDataSocketRoutes(app);
+projectDataSourceRoutes(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
