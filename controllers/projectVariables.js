@@ -61,20 +61,20 @@ module.exports = {
     }
   },
 
-  // projectProfilePages: async (req, res, next) => {
-  //   try {
-  //     const projectProfile = await ProjectProfile.findById({_id: req.body.profileId}).populate('projectProfilePages');
-  //     if(projectProfile) {
-  //       res.status(200).json({profiles: projectProfile.projectProfilePages});
-  //     } else {
-  //       res.status(404).send({ error: "Project Profile Not Found" });
-  //     }
-  //   } catch (errors) {
-  //     console.log(">>> PROJECT PROFILE PAGES EXCEPTION >>>", errors);
-  //     const [handledErrors, statusCode] = handleErrors(errors);
-  //     res.status(statusCode).send(handledErrors);
-  //   }
-  // },
+  projectVariables: async (req, res, next) => {
+    try {
+      const project = await Project.findById({_id: req.body.projectId}).populate('projectVariables');
+      if(project) {
+        res.status(200).json({profiles: project.projectVariables});
+      } else {
+        res.status(404).send({ error: "Project Not Found" });
+      }
+    } catch (errors) {
+      console.log(">>> PROJECT VARIABLES EXCEPTION >>>", errors);
+      const [handledErrors, statusCode] = handleErrors(errors);
+      res.status(statusCode).send(handledErrors);
+    }
+  },
 
   // deleteProjectProfilePage: async (req, res, next) => {
   //   try {
