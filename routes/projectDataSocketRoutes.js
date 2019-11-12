@@ -30,7 +30,7 @@ module.exports = (app) => {
    * @swagger
    * /createProjectDataSocket:
    *  post:
-   *    description: Create project alert
+   *    description: Create project data socket
    *    parameters:
    *      - name: projectId
    *        in: body
@@ -51,7 +51,7 @@ module.exports = (app) => {
    * @swagger
    * /updateProjectDataSocket:
    *  patch:
-   *    description: Update project alert
+   *    description: Update project data socket
    *    parameters:
    *      - name: projectDataSocketId
    *        in: body
@@ -72,7 +72,7 @@ module.exports = (app) => {
    * @swagger
    * /deleteProjectDataSocket:
    *  delete:
-   *    description: Delete project alert
+   *    description: Delete project data socket
    *    parameters:
    *      - name: projectDataSocketId
    *        in: body
