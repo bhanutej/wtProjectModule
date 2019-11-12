@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 require('./models/User');
 require('./models/Project');
@@ -28,6 +30,23 @@ const projectEventRoutes = require('./routes/projectEventRoutes');
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true });
 
 const  app = express();
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            title: 'WebTool APIs',
+            description: 'WebTool API informations',
+            contact: {
+                name: "Microland"
+            },
+            servers: ["http://localhost:5000/", "https://young-journey-41264.herokuapp.com/"]
+        }
+    },
+    apis: ["./routes/*.js"]
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/apiDocs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // parse appliction/x-www-from-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
