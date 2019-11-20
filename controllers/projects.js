@@ -24,11 +24,9 @@ module.exports = {
     try {
       const user = await User.findById({_id: req.userData.userId});
       if (user) {
-        const project = new Project(_projectObj(req.body));
-        project.user = user;
+        const project = await new Project(_projectObj(req.body, user));
         await project.save();
-        user.projects.push(project);
-        await user.save();
+        await User.update({ _id: req.userData.userId },{ $push: { projects: project } });
         res.status(201).json({ message: 'Project created', project });
       } else {
         res.status(404).send({ error: "User Not Found" });
@@ -44,7 +42,7 @@ module.exports = {
     try {
       const user = await User.findById({_id: req.userData.userId});
       if(user.projects.includes(req.body.projectId)){
-        const project = await Project.findByIdAndUpdate({_id: req.body.projectId}, _projectObj(req.body), { new: true, runValidators: true })
+        const project = await Project.findByIdAndUpdate({_id: req.body.projectId}, _projectObj(req.body, user), { new: true, runValidators: true })
         res.status(200).json({ message: 'Project Updated', project });
       }
     } catch (errors) {
@@ -57,7 +55,7 @@ module.exports = {
   projects: async (req, res, next) => {
     try {
       const user = await User.findById({_id: req.userData.userId}).populate('projects');
-      res.status(200).json({address: user.projects});
+      res.status(200).json({projects: user.projects});
     } catch (errors) {
       console.log(">>> PROJECTS EXCEPTION >>>", errors);
       const [handledErrors, statusCode] = handleErrors(errors);
@@ -70,7 +68,7 @@ module.exports = {
       const user = await User.findById({_id: req.userData.userId}).populate('projects');
       await user.update({ $pull: { projects: { $in: [req.body.projectId] } } } )
       await Project.deleteOne({_id: req.body.projectId});
-      res.status(200).json({projects: user.projects});
+      res.status(200).json({ message: "Project Deleted" });
     } catch(errors) {
       console.log(">>> DELETE PROJECT EXCEPTION >>>", errors);
       const [handledErrors, statusCode] = handleErrors(errors);
@@ -79,9 +77,10 @@ module.exports = {
   }
 };
 
-_projectObj = (project) => {
+_projectObj = (project, user) => {
   return {
     name: project.name,
-    description: project.description
+    description: project.description,
+    user: user
   };
 }

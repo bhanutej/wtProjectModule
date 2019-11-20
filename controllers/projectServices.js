@@ -25,11 +25,9 @@ module.exports = {
       try {
         const project = await Project.findById({_id: req.body.projectId});
         if (project) {
-          const projectService = new ProjectService(_projectServiceObj(req.body));
-          projectService.project = project;
+          const projectService = new ProjectService(_projectServiceObj(req.body, project));
           await projectService.save();
-          project.projectServices.push(projectService);
-          await project.save();
+          await Project.update({ _id: req.body.projectId },{ $push: { projectServices: projectService } });
           res.status(201).json({ message: 'Project Service created', projectService });
         } else {
           res.status(404).send({ error: "Project Not Found" });
@@ -90,9 +88,16 @@ module.exports = {
   }
 };
 
-_projectServiceObj = (profileService) => {
+_projectServiceObj = (profileService, project = null) => {
+  if (project) {
+    return {
+      name: profileService.name,
+      serviceInfo: profileService.serviceInfo,
+      project: project
+    };
+  }
   return {
     name: profileService.name,
-    serviceInfo: profileService.serviceInfo,
+    serviceInfo: profileService.serviceInfo
   };
-}
+};

@@ -25,11 +25,9 @@ module.exports = {
       try {
         const project = await Project.findById({_id: req.body.projectId});
         if (project) {
-          const projectDataSource = new ProjectDataSource(_projectDataSourceObj(req.body));
-          projectDataSource.project = project;
+          const projectDataSource = new ProjectDataSource(_projectDataSourceObj(req.body, project));
           await projectDataSource.save();
-          project.projectDataSources.push(projectDataSource);
-          await project.save();
+          await Project.update({ _id: req.body.projectId },{ $push: { projectDataSources: projectDataSource } });
           res.status(201).json({ message: 'Project DataSource created', projectDataSource });
         } else {
           res.status(404).send({ error: "Project Not Found" });
@@ -90,7 +88,14 @@ module.exports = {
   }
 };
 
-_projectDataSourceObj = (projectDataSource) => {
+_projectDataSourceObj = (projectDataSource, project) => {
+  if (project) {
+    return {
+      name: projectDataSource.name,
+      dataSourceInfo: projectDataSource.dataSourceInfo,
+      project: project
+    };
+  }
   return {
     name: projectDataSource.name,
     dataSourceInfo: projectDataSource.dataSourceInfo,

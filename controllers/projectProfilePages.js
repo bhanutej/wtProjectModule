@@ -26,11 +26,9 @@ module.exports = {
       try {
         const projectProfile = await ProjectProfile.findById({_id: req.body.profileId});
         if (projectProfile) {
-          const projectProfilePage = new ProjectProfilePage(_projectProfilePageObj(req.body));
-          projectProfilePage.projectProfile = projectProfile;
+          const projectProfilePage = new ProjectProfilePage(_projectProfilePageObj(req.body, projectProfile));
           await projectProfilePage.save();
-          projectProfile.projectProfilePages.push(projectProfilePage);
-          await projectProfile.save();
+          await ProjectProfile.update({ _id: req.body.profileId },{ $push: { projectProfilePages: projectProfilePage } });
           res.status(201).json({ message: 'Project Profile Page created', projectProfilePage });
         } else {
           res.status(404).send({ error: "Project Profile Not Found" });
@@ -86,13 +84,21 @@ module.exports = {
   }
 };
 
-_projectProfilePageObj = (profilePage) => {
+_projectProfilePageObj = (profilePage, projectProfile) => {
+  if (projectProfile) {
+    return {
+      name: profilePage.name,
+      structure: profilePage.structure,
+      elements: profilePage.elements,
+      projectProfile: projectProfile
+    };
+  }
   return {
     name: profilePage.name,
     structure: profilePage.structure,
-    elements: profilePage.elements,
+    elements: profilePage.elements
   };
-}
+};
 
 _updateIsDefaultProfile = async (projectProfile, profileId) => {
   const projectId = projectProfile.project;

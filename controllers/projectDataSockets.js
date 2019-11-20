@@ -25,11 +25,9 @@ module.exports = {
       try {
         const project = await Project.findById({_id: req.body.projectId});
         if (project) {
-          const projectDataSocket = new ProjectDataSocket(_projectDataSocketObj(req.body));
-          projectDataSocket.project = project;
+          const projectDataSocket = new ProjectDataSocket(_projectDataSocketObj(req.body, project));
           await projectDataSocket.save();
-          project.projectDataSockets.push(projectDataSocket);
-          await project.save();
+          await Project.update({ _id: req.body.projectId }, { $push: { projectDataSockets: projectDataSocket } });
           res.status(201).json({ message: 'Project DataSocket created', projectDataSocket });
         } else {
           res.status(404).send({ error: "Project Not Found" });
@@ -90,9 +88,16 @@ module.exports = {
   }
 };
 
-_projectDataSocketObj = (projectDataSocket) => {
+_projectDataSocketObj = (projectDataSocket, project = null) => {
+  if(project) {
+    return {
+      name: projectDataSocket.name,
+      socketInfo: projectDataSocket.socketInfo,
+      project: project
+    };
+  }
   return {
     name: projectDataSocket.name,
-    socketInfo: projectDataSocket.socketInfo,
+    socketInfo: projectDataSocket.socketInfo
   };
-}
+};

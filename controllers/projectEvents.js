@@ -25,11 +25,9 @@ module.exports = {
       try {
         const project = await Project.findById({_id: req.body.projectId});
         if (project) {
-          const projectEvent = new ProjectEvent(_projectEventObj(req.body));
-          projectEvent.project = project;
+          const projectEvent = new ProjectEvent(_projectEventObj(req.body, project));
           await projectEvent.save();
-          project.projectEvents.push(projectEvent);
-          await project.save();
+          await Project.update({ _id: req.body.projectId },{ $push: { projectEvents: projectEvent } });
           res.status(201).json({ message: 'Project Event created', projectEvent });
         } else {
           res.status(404).send({ error: "Project Not Found" });
@@ -90,7 +88,14 @@ module.exports = {
   }
 };
 
-_projectEventObj = (projectEvent) => {
+_projectEventObj = (projectEvent, project = null) => {
+  if(project) {
+    return {
+      name: projectEvent.name,
+      eventInfo: projectEvent.eventInfo,
+      project: project
+    };
+  }
   return {
     name: projectEvent.name,
     eventInfo: projectEvent.eventInfo,

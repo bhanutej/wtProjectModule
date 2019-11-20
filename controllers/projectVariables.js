@@ -25,11 +25,10 @@ module.exports = {
       try {
         const project = await Project.findById({_id: req.body.projectId});
         if (project) {
-          const projectVariable = new ProjectVariable(_projectVariableObj(req.body));
+          const projectVariable = new ProjectVariable(_projectVariableObj(req.body, project));
           projectVariable.project = project;
           await projectVariable.save();
-          project.projectVariables.push(projectVariable);
-          await project.save();
+          await Project.update({ _id: req.body.projectId },{ $push: { projectVariables: projectVariable } });
           res.status(201).json({ message: 'Project Variable created', projectVariable });
         } else {
           res.status(404).send({ error: "Project Not Found" });
@@ -48,8 +47,7 @@ module.exports = {
     try {
       const projectVariable = await ProjectVariable.findById({_id: req.body.projectVariableId});
       if (projectVariable) {
-        const aa = await projectVariable.updateOne(_projectVariableObj(req.body));
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ", aa);
+        await projectVariable.updateOne(_projectVariableObj(req.body));
         res.status(200).json({ message: 'Project Variable Updated', projectVariable });
       } else {
         res.status(404).json({ message: 'Project Variable Not Found' });  
@@ -91,12 +89,19 @@ module.exports = {
   }
 };
 
-_projectVariableObj = (profileVariable) => {
+_projectVariableObj = (profileVariable, project = null) => {
+  if (project) {
+    return {
+      name: profileVariable.name,
+      variableInfo: profileVariable.variableInfo,
+      project: project
+    };
+  }
   return {
     name: profileVariable.name,
-    variableInfo: profileVariable.variableInfo,
+    variableInfo: profileVariable.variableInfo
   };
-}
+};
 
 _updateIsDefaultProfile = async (projectProfile, profileId) => {
   const projectId = projectProfile.project;
